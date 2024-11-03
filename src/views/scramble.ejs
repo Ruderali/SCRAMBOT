@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scramble Alert</title>
+    <link rel="stylesheet" href="/CSS/styles.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+
+<div class="container">
+    <img src="/images/logo.png" alt="Logo">
+    <h1>Scramble Alert</h1>
+    <form action="/scramble/submit" method="POST">
+        <label for="system">Star System:</label>
+        <select id="system" name="system" onchange="populatePlanets()" required>
+            <option value="">Select a system</option>
+            <% starSystems.forEach(system => { %>
+                <option value="<%= system._id %>" data-planets='<%= JSON.stringify(system.planets) %>'>
+                    <%= system.name %>
+                </option>
+            <% }); %>
+        </select>
+
+        <label for="planet">Planet:</label>
+        <select id="planet" name="planet" onchange="populateMoons()" disabled required>
+            <option value="">Select a planet</option>
+        </select>
+
+        <label for="moon">Body:</label>
+        <select id="moon" name="moon" disabled required>
+            <option value="">Select a moon</option>
+        </select>
+
+        <label for="timeOption">Select Time:</label>
+        <select id="timeOption" name="timeOption" required onchange="toggleTimePicker()">
+            <option value="ASAP">ASAP</option>
+            <option value="custom">Custom</option>
+        </select>
+        
+        <div id="customTimeContainer" style="display: none;">
+            <label for="customTime">Enter Time:</label>
+            <input type="time" id="customTime" name="customTime" step="900">
+        </div>
+
+        <div class="notes">
+            <h3>Notes:</h3>
+            <textarea rows="4" name="notes" placeholder="Add any notes here..."></textarea>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+            <button type="submit" style="margin-right: 10px; padding: 10px; background-color: #4A5D23; color: white; border: none; border-radius: 4px; cursor: pointer; width: 65%; text-align: center;">Submit</button>
+            <a href="/" class="back-button" style="text-decoration: none; display: inline-block; width: 30%; text-align: center; padding: 10px; background-color: #C7C9C7; color: #4A5D23; border-radius: 4px; cursor: pointer;">Back</a>
+        </div>                
+    </form>
+</div>
+
+<script>
+
+    function toggleTimePicker() {
+        const timeOption = document.getElementById('timeOption').value;
+        const customTimeContainer = document.getElementById('customTimeContainer');
+        
+        if (timeOption === 'custom') {
+            customTimeContainer.style.display = 'block';
+        } else {
+            customTimeContainer.style.display = 'none';
+        }
+    }
+    // Function to populate planets based on the selected star system
+    function populatePlanets() {
+        const systemSelect = document.getElementById('system');
+        const planetSelect = document.getElementById('planet');
+        const moonSelect = document.getElementById('moon');
+        
+        // Clear previous options
+        planetSelect.innerHTML = '<option value="">Select a planet</option>';
+        moonSelect.innerHTML = '<option value="">Select a moon</option>';
+        moonSelect.disabled = true;
+
+        const selectedSystem = systemSelect.value;
+        const planets = JSON.parse(systemSelect.options[systemSelect.selectedIndex].getAttribute('data-planets'));
+
+        planets.forEach(planet => {
+            const option = document.createElement('option');
+            option.value = planet._id;
+            option.textContent = planet.name;
+            // Store moons in a data attribute for later use
+            option.setAttribute('data-moons', JSON.stringify(planet.moons));
+            planetSelect.appendChild(option);
+        });
+
+        planetSelect.disabled = planets.length === 0; // Disable if no planets
+    }
+
+    // Function to populate moons based on the selected planet
+    function populateMoons() {
+    const planetSelect = document.getElementById('planet');
+    const moonSelect = document.getElementById('moon');
+
+    // Clear previous options
+    moonSelect.innerHTML = '<option value="">Select an option</option>';
+    moonSelect.disabled = true;
+
+    const selectedPlanetId = planetSelect.value;
+    const selectedPlanetName = planetSelect.options[planetSelect.selectedIndex].textContent;
+    const moons = JSON.parse(planetSelect.options[planetSelect.selectedIndex].getAttribute('data-moons'));
+
+    // Add an option for "<planetname> orbit"
+    const orbitOption = document.createElement('option');
+    orbitOption.value = `${selectedPlanetId}-orbit`; // Unique value for the orbit option
+    orbitOption.textContent = `${selectedPlanetName} Orbit`;
+    moonSelect.appendChild(orbitOption);
+
+    // Populate moons as additional options
+    moons.forEach(moon => {
+        const option = document.createElement('option');
+        option.value = moon._id;
+        option.textContent = moon.name;
+        moonSelect.appendChild(option);
+    });
+
+    moonSelect.disabled = moons.length === 0 && !orbitOption; // Disable if no moons or orbit
+}
+
+</script>
+
+</body>
+</html>

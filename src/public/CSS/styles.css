@@ -1,0 +1,101 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #C2C8B3; /* Light Army green background */
+}
+
+.container {
+    background-color: #FFFFFF; /* White container background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+
+h1 {
+    text-align: center;
+    color: #4A5D23; /* Olive green for the Army as primary heading color */
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #4A5D23; /* Olive green for labels */
+}
+
+select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #70796D; /* Army grey-green for subtle border */
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4A5D23; /* Olive green for button */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #3D4D1F; /* Darker Army green for hover effect */
+}
+
+.notes {
+    margin-top: 10px;
+}
+
+.notes h3 {
+    margin: 10px 0;
+    color: #4A5D23; /* Olive green for notes title */
+}
+
+.notes textarea {
+    width: calc(100% - 16px);
+    padding: 8px;
+    border: 1px solid #70796D; /* Grey-green border for textarea */
+    border-radius: 4px;
+    resize: vertical;
+    margin-bottom: 10px;
+    padding-right: 8px;
+}
+
+img {
+    display: block;
+    margin: 0 auto 20px;
+    width: 150px;
+}
+
+#customTimeContainer {
+    width: 100%;
+    padding: 0 8px;
+    box-sizing: border-box;
+    margin-top: 8px;
+}
+
+#customTime {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #4A5D23; /* Olive green for border */
+    background-color: #E8EDEA; /* Very light grey-green for Army theme */
+    color: #333;
+    border-radius: 4px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    appearance: none;
+}
+
+#customTime:focus {
+    outline: none;
+    border-color: #D35400; /* Burnt orange for focus */
+    box-shadow: 0px 0px 8px rgba(211, 84, 0, 0.4);
+}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalize Your Account</title>
+    <link rel="stylesheet" href="/styles.css"> <!-- Optional: link to your CSS file -->
+</head>
+<body>
+    <div class="container">
+        <h1>Finalize Your Account</h1>
+        <p>Please enter your in-game name to complete the setup:</p>
+        <form action="/auth/finalize" method="POST">
+            <label for="inGameName">In-Game Name:</label>
+            <input type="text" id="inGameName" name="inGameName" required>
+            <button type="submit">Submit</button>
+        </form>
+        <a href="/">Cancel</a> <!-- Link to cancel and return home -->
+    </div>
+</body>
+</html>
