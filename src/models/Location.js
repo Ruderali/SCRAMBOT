@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-// Moon schema
-const Moon = new mongoose.Schema({
+// Moon schema (nb this now considered 'final' location info i.e. stations etc...)
+const MoonSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -14,7 +14,7 @@ const Moon = new mongoose.Schema({
 });
 
 // Planet schema
-const Planet = new mongoose.Schema({
+const PlanetSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -32,7 +32,7 @@ const Planet = new mongoose.Schema({
 });
 
 // System schema
-const StarSystem = new mongoose.Schema({
+const StarSystemSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -44,8 +44,8 @@ const StarSystem = new mongoose.Schema({
     }]
 });
 
-const SystemModel = mongoose.model('StarSystem', StarSystem);
-const PlanetModel = mongoose.model('Planet', Planet);
-const MoonModel = mongoose.model('Moon', Moon);
+const StarSystem = mongoose.model('StarSystem', StarSystemSchema);
+const Planet = mongoose.model('Planet', PlanetSchema);
+const Moon = mongoose.model('Moon', MoonSchema);
 
-module.exports = { SystemModel, PlanetModel, MoonModel };
+module.exports = { StarSystem, Planet, Moon };

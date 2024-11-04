@@ -1,17 +1,20 @@
 const express = require('express');
+const mongoose = require('mongoose');
+
 const db = require('../config/database');
-const { SystemModel, PlanetModel, MoonModel } = require('../models/Location');
+const Scramble = require('../models/Scramble');
+const { StarSystem } = require('../models/Location');
+
 const router = express.Router();
 
 // Route to display the scramble form
 router.get('/', async (req, res) => {
     try {
-        const starSystems = await SystemModel.find()
+        const starSystems = await StarSystem.find()
         .populate({
             path: 'planets',
             populate: { path: 'moons' }
         });
-        console.log(starSystems)
         res.render('scramble', { starSystems } );
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -20,25 +23,57 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/submit', async (req, res) => {
-    const { system, planet, moon } = req.body; // Extracting values from the request body
-
     try {
-        // Here you can process the selected system, planet, and moon
-        console.log('Selected System:', system);
-        console.log('Selected Planet:', planet);
-        console.log('Selected Moon:', moon);
+        const { system, planet, moon, timeOption, customTime, notes } = req.body;
+        console.log( system, planet, moon, timeOption, customTime, notes)
+        let startTime;
+        if (timeOption === 'ASAP') {
+            startTime = new Date();
+        } else if (timeOption === 'custom') {
+            // Custom time from user input (assumes the date is today if only time is given)
+            const [hours, minutes] = customTime.split(':');
+            startTime = new Date();
+            startTime.setHours(hours, minutes, 0, 0); // Set time to custom time
+        }
 
-        // Optionally, you could fetch more details about the selected items
-        const selectedSystem = await SystemModel.findById(system).populate({
-            path: 'planets',
-            populate: { path: 'moons' }
+        // Create a new Scramble document
+        const newScramble = new Scramble({
+            name: "Scramble Alert", // Example; adjust as needed
+            targetSystem: system,
+            targetPlanet: planet,
+            targetMoon: moon,
+            notes: notes,
+            startTime: startTime,
+            //initiatingUser: req.user._id // Assuming user ID is available in the session or JWT
         });
 
-        // Responding with the selected data or redirecting
-        res.render('result', { selectedSystem, selectedPlanet: planet, selectedMoon: moon });
+        // Save the new scramble to the database
+        await newScramble.save();
+
+        // Redirect or respond after saving
+        res.redirect(`/scramble/success/${newScramble._id}`);
     } catch (error) {
-        console.error('Error processing submission:', error);
-        res.status(500).send('Internal Server Error');
+        console.error("Error submitting scramble order:", error);
+        res.status(500).send("Error processing the scramble order.");
+    }
+});
+
+router.get('/success/:id', async (req, res) => {
+    try {
+        const scramble = await Scramble.findById(req.params.id)
+            .populate('targetSystem', 'name')
+            .populate('targetPlanet', 'name')
+            .populate('targetMoon', 'name')
+            .populate('initiatingUser', 'username');
+        
+        if (!scramble) {
+            return res.status(404).send('Scramble Order not found');
+        }
+
+        res.render('scramSuccess', { scramble });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
     }
 });
 

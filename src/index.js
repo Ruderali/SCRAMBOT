@@ -20,14 +20,12 @@ app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-enco
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ secret: process.env.SESSION_SECRET, resave: true, saveUninitialized: true }));
 
-
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', mainRoutes);
 app.use('/auth', authRoutes);
 app.use('/scramble', scrambleRoute);
-
 
 app.listen(5000, () => {
     console.log('Server is running on http://localhost:5000');

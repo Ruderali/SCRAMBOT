@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/CSS/styles.css"> <!-- Link to your CSS file -->
+    <title>Scramble Order Success</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="/images/logo.png" alt="Logo">
+            <h1>Scramble Order Submitted</h1>
+        </div>
+
+        <div class="detail"><strong>Target System:</strong> <%= scramble.targetSystem.name %></div>
+        <div class="detail"><strong>Target Planet:</strong> <%= scramble.targetPlanet.name %></div>
+        <div class="detail"><strong>Target Moon:</strong> <%= scramble.targetMoon.name %></div>
+        <div class="detail"><strong>Start Time:</strong> <%= scramble.startTime.toLocaleString() %></div>
+        
+        <% if (scramble.notes) { %>
+            <div class="detail"><strong>Notes:</strong> <%= scramble.notes %></div>
+        <% } %>
+
+        <a href="/" class="back-link">Return to Home</a>
+    </div>
+</body>
+</html>

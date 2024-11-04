@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { PlanetModel, MoonModel, SystemModel } = require('../src/models/Location');
+const { Planet, Moon, StarSystem } = require('../src/models/Location');
 const db = require('../src/config/database');
 
 // Initial data
@@ -10,19 +10,19 @@ const initialData = [
             planets: [
                 {
                     name: 'Hurston',
-                    moons: ['Arial', 'Aberdeen', 'Magda', 'Ita', 'Everus Harbor']
+                    moons: ['Hurston Orbit', 'Arial', 'Aberdeen', 'Magda', 'Ita', 'Everus Harbor']
                 },
                 {
                     name: 'Crusader',
-                    moons: ['Celin', 'Daymar', 'Yela', 'Seraphim Station']
+                    moons: ['Crusader Orbit', 'Celin', 'Daymar', 'Yela', 'Seraphim Station']
                 },
                 {
                     name: 'ArcCorp',
-                    moons: ['Lyria', 'Wala', 'Baijini Point']
+                    moons: ['ArcCorp Orbit', 'Lyria', 'Wala', 'Baijini Point']
                 },
                 {
                     name: 'microTech',
-                    moons: ['Calliope', 'Clio', 'Euterpe', 'Port Tressler']
+                    moons: ['microTech Orbit', 'Calliope', 'Clio', 'Euterpe', 'Port Tressler']
                 }
             ]
         }
@@ -33,23 +33,23 @@ const initialData = [
             planets: [
                 {
                     name: 'Pyro I',
-                    moons: []
+                    moons: ['Pyro I Orbit']
                 },
                 {
                     name: 'Monox (Pyro II)',
-                    moons: []
+                    moons: ['Pyro II Orbit']
                 },
                 {
                     name: 'Bloom (Pyro III)',
-                    moons: []
+                    moons: ['Pyro III Orbit']
                 },
                 {
                     name: 'Pyro V',
-                    moons: ['Ignis', 'Vatra', 'Adir', 'Fairo', 'Fuego', 'Vuur', 'Pyro IV']
+                    moons: ['Pyro V Orbit', 'Ignis', 'Vatra', 'Adir', 'Fairo', 'Fuego', 'Vuur', 'Pyro IV']
                 },
                 {
                     name: 'Terminus (Pyro VI)',
-                    moons: ['Ruin Station']
+                    moons: ['Pyro VI Orbit', 'Ruin Station']
                 }
             ]
         }
@@ -60,18 +60,18 @@ async function seedDatabase() {
     console.log('Starting seedDatabase');
     try {
         // Clear previous data
-        await SystemModel.deleteMany({});
-        await PlanetModel.deleteMany({});
-        await MoonModel.deleteMany({});
+        await StarSystem.deleteMany({});
+        await Planet.deleteMany({});
+        await Moon.deleteMany({});
 
         // Create systems, planets, and moons
         for (const data of initialData) {
             // Create the star system
-            const starSystem = await SystemModel.create({ name: data.system.name });
+            const starSystem = await StarSystem.create({ name: data.system.name });
 
             for (const planetData of data.system.planets) {
                 // Create the planet
-                const planet = await PlanetModel.create({
+                const planet = await Planet.create({
                     name: planetData.name,
                     parentSystem: starSystem._id
                 });
@@ -79,7 +79,7 @@ async function seedDatabase() {
                 // Create and link moons to the planet
                 const moonIds = [];
                 for (const moonName of planetData.moons) {
-                    const moon = await MoonModel.create({
+                    const moon = await Moon.create({
                         name: moonName,
                         parentPlanet: planet._id
                     });
