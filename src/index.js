@@ -7,12 +7,19 @@ const scrambleRoute = require('./routes/scramble');
 const mainRoutes = require('./routes/main'); // Import the main page routes
 const db = require('./config/database');
 const seedDatabase = require('../scripts/seedDatabase')
+const encryption = require('./config/encryption');
+
 
 const app = express();
 db.connect();
 
 seedDatabase();
-
+if(encryption.verify('brookerowan@gmail.com')){
+    console.log('Encryption working')
+}
+else{
+    console.log('Encryption fucked')
+}
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views')); // Specify the views directory

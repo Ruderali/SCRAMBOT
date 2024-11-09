@@ -1,6 +1,7 @@
 const passport = require('passport');
 const DiscordStrategy = require('passport-discord').Strategy;
 const User = require('../models/User');
+const encryption = require('./encryption');
 
 const clientID = process.env.DISCORD_CLIENT;
 const clientSecret = process.env.DISCORD_SECRET;
@@ -17,23 +18,21 @@ passport.use(new DiscordStrategy({
         let user = await User.findOne({ discordId: profile.id });
 
         if (user) {
-            // Update existing user
-            user.username = profile.username;
-            user.discriminator = profile.discriminator;
-            user.avatar = profile.avatar;
-            user.email = profile.email || user.email;
+            user.username = encryption.encrypt(profile.username);
+            user.discriminator = encryption.encrypt(profile.discriminator);
+            user.avatar = encryption.encrypt(profile.avatar);
+            user.email = encryption.encrypt(profile.email) || encryption.encrypt(user.email);
             await user.save();
         } else {
-            // Create new user
             user = await User.create({
                 discordId: profile.id,
-                username: profile.username,
-                discriminator: profile.discriminator,
-                avatar: profile.avatar,
-                email: profile.email
+                username: encryption.encrypt(profile.username),
+                discriminator: encryption.encrypt(profile.discriminator),
+                avatar: encryption.encrypt(profile.avatar),
+                email: encryption.encrypt(profile.email)
             });
         }
-
+        
         return done(null, user);
     } catch (err) {
         console.error('Error in Discord strategy:', err);

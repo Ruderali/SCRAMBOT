@@ -3,6 +3,7 @@ const passport = require('../config/passport');
 const User = require('../models/User')
 const router = express.Router();
 const db = require('../config/database');
+const encryption = require('../config/encryption');
 
 
 router.get('/discord', passport.authenticate('discord'));
@@ -40,7 +41,7 @@ router.get('/discord/callback',
 
                     if (!existingUser.inGameName) {
                         console.log('inGameName is empty, redirecting to form...');
-                        return res.redirect('/auth/finalize'); // Change this to your actual form route
+                        return res.redirect('/auth/finalize');
                     } else {
                         console.log('inGameName exists, redirecting to home...');
                         return res.redirect('/');
@@ -66,7 +67,7 @@ router.post('/finalize', async (req, res) => {
 
     try {
         // Update the user's inGameName in the database
-        await User.findOneAndUpdate({ discordId: discordId }, { inGameName: inGameName });
+        await User.findOneAndUpdate({ discordId: discordId }, { inGameName: encryption.encrypt(inGameName) });
         console.log('inGameName updated successfully, redirecting to home...');
         res.redirect('/'); // Redirect to the home page after successful update
     } catch (error) {
