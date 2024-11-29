@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scramble Alert</title>
-    <link rel="stylesheet" href="/CSS/styles.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="/CSS/styles.css">
 </head>
 <body>
 
 <div class="container">
     <img src="/images/logo.png" alt="Logo">
     <h1>Scramble Alert</h1>
-    <form action="/scramble/submit" method="POST">
+    <form action="/scramble/submit" method="POST" onsubmit="adjustTimeForZulu()">
         <label for="system">Star System:</label>
         <select id="system" name="system" onchange="populatePlanets()" required>
             <option value="">Select a system</option>
@@ -41,6 +41,21 @@
         <div id="customTimeContainer" style="display: none;">
             <label for="customTime">Enter Time:</label>
             <input type="time" id="customTime" name="customTime" step="900">
+            
+            <label for="timezone">Select Timezone:</label>
+            <select id="timezone" name="timezone" required>
+                <option value="AEST" selected>Australian Eastern Standard Time (AEST)</option>
+                <option value="AWST">Australian Western Standard Time (AWST)</option>
+                <option value="ACST">Australian Central Standard Time (ACST)</option>
+                <option value="AEDT">Australian Eastern Daylight Time (AEDT)</option>
+                <option value="ACDT">Australian Central Daylight Time (ACDT)</option>
+                <option value="NZDT">New Zealand Daylight Time (NZDT)</option>
+                <option value="NZST">New Zealand Standard Time (NZST)</option>
+                <option value="PST">Pacific Standard Time (PST)</option>
+                <option value="EST">Eastern Standard Time (EST)</option>
+                <option value="CST">Central Standard Time (CST)</option>
+                <option value="UTC">UTC (Zulu Time)</option>
+            </select>
         </div>
 
         <div class="notes">
@@ -55,7 +70,6 @@
 </div>
 
 <script>
-
     function toggleTimePicker() {
         const timeOption = document.getElementById('timeOption').value;
         const customTimeContainer = document.getElementById('customTimeContainer');
@@ -66,6 +80,53 @@
             customTimeContainer.style.display = 'none';
         }
     }
+
+    function adjustTimeForZulu() {
+        const timeOption = document.getElementById('timeOption').value;
+        if (timeOption !== 'custom') return; // Only adjust time if 'custom' is selected
+
+        const customTimeInput = document.getElementById('customTime');
+        const timezoneSelect = document.getElementById('timezone');
+        const customTime = customTimeInput.value;
+        const timezone = timezoneSelect.value;
+
+        // Convert the selected time and timezone to UTC (Zulu time)
+        if (customTime) {
+            const [hours, minutes] = customTime.split(':').map(num => parseInt(num, 10));
+
+            const date = new Date();
+            date.setHours(hours, minutes, 0, 0);
+
+            let offsetMinutes = 0;
+
+            // Define time zone offsets in minutes
+            const timezoneOffsets = {
+                'AEST': 600,  // +10:00
+                'AWST': 480,  // +08:00
+                'ACST': 570,  // +09:30
+                'AEDT': 660,  // +11:00
+                'ACDT': 630,  // +10:30
+                'NZDT': 780,  // +13:00
+                'NZST': 720,  // +12:00
+                'PST': -480,  // -08:00
+                'EST': -300,  // -05:00
+                'CST': -360,  // -06:00
+                'UTC': 0
+            };
+
+            offsetMinutes = timezoneOffsets[timezone] || 0; // Default to 0 if not found (UTC)
+
+            // Adjust date by the timezone offset
+            date.setMinutes(date.getMinutes() - offsetMinutes);
+
+            // Format to UTC (Zulu Time)
+            const utcDateString = date.toISOString(); // This automatically converts to UTC
+
+            // Set the Zulu time in the form before submitting
+            document.getElementById('customTime').value = utcDateString; // Ensure correct format in form
+        }
+    }
+
     // Function to populate planets based on the selected star system
     function populatePlanets() {
         const systemSelect = document.getElementById('system');

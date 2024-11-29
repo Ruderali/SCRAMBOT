@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
+const { pingMembers } = require('../bot/bot');
 const db = require('../config/database');
 const Scramble = require('../models/Scramble');
 const { StarSystem } = require('../models/Location');
@@ -50,6 +51,9 @@ router.post('/submit', async (req, res) => {
         // Save the new scramble to the database
         await newScramble.save();
 
+        // Notify members after saving
+        await pingMembers(newScramble._id);
+
         // Redirect or respond after saving
         res.redirect(`/scramble/success/${newScramble._id}`);
     } catch (error) {
@@ -74,6 +78,53 @@ router.get('/success/:id', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send('Server Error');
+    }
+});
+
+// GET route to display the mute form
+router.get('/mute/:discordId', async (req, res) => {
+    const discordId = req.params.discordId;
+
+    try {
+        const user = await User.findOne({ discordId });
+        
+        if (!user) {
+            user = await User.create({
+                discordId: profile.id,
+                username: encryption.encrypt(profile.username),
+                discriminator: encryption.encrypt(profile.discriminator),
+                avatar: encryption.encrypt(profile.avatar),
+                email: encryption.encrypt(profile.email)        
+            })}
+        // Render the form with the current mute status
+        res.render('mute', { user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("An error occurred while processing your request");
+    }
+});
+
+// POST route to handle form submission and update mute status
+router.post('/mute/:discordId', async (req, res) => {
+    const discordId = req.params.discordId;
+    const muteStatus = req.body.mute === 'true'; // Convert radio button string to boolean
+
+    try {
+        const user = await User.findOne({ discordId });
+
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+
+        // Update the user's mute status and save
+        user.mute = muteStatus;
+        await user.save();
+
+        // Redirect to confirm the change
+        res.render('mute', { user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("An error occurred while processing your request");
     }
 });
 

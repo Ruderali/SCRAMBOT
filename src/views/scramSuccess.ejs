@@ -16,7 +16,7 @@
         <div class="detail"><strong>Target System:</strong> <%= scramble.targetSystem.name %></div>
         <div class="detail"><strong>Target Planet:</strong> <%= scramble.targetPlanet.name %></div>
         <div class="detail"><strong>Target Moon:</strong> <%= scramble.targetMoon.name %></div>
-        <div class="detail"><strong>Start Time:</strong> <%= scramble.startTime.toLocaleString() %></div>
+        <div class="detail"><strong>Start Time (UTC time):</strong> <%= scramble.startTime.toISOString() %></div>
         
         <% if (scramble.notes) { %>
             <div class="detail"><strong>Notes:</strong> <%= scramble.notes %></div>

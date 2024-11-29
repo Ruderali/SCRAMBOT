@@ -38,7 +38,16 @@ const UserSchema = new mongoose.Schema({
         type: String,
         enum: Object.values(UserRole),
         default: UserRole.GUEST
-    }
+    },
+    mute: {
+        type: Boolean,
+        default: true,
+    },
+    timezone: {
+        type: String,
+        required: false,
+        default: 'UTC', // Default to UTC if not provided
+    },
 });
 
 
