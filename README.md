@@ -30,8 +30,9 @@ You can generate your own encryption key with the following powershell
 
 ## Current Features
 Create a scramble
+
 ![](https://cdn.discordapp.com/attachments/959680266564153436/1302670749319954545/image.png?ex=675914ed&is=6757c36d&hm=50acda4b09e0b6942bb5f80f3f17472ae134b44ff59520f962aaaef2c007a6ce&=)
-Upon submitting as scramble, all members currently subscribed to scrambles will receive a discord direct message with information about the scramble and an invite to a private voice channel to use for the purposes of the scramble. Our org found this valuable as we previously organized communications on our public facing discord server for ease of use. Scrambot enables fast spinup and spindown of adhoc voice channels with permissions limited to those responding to the alert.
+Upon submitting a scramble, all members currently subscribed to scrambles will receive a discord direct message with information about the scramble and an invite to a private voice channel to use for the purposes of the scramble. Our org found this valuable as we previously organized communications on our public facing discord server for ease of use. Scrambot enables fast spinup and spindown of adhoc voice channels with permissions limited to those responding to the alert.
 
 ![](https://cdn.discordapp.com/attachments/959680266564153436/1312002666267803678/image.png?ex=675969b3&is=67581833&hm=1a7b8a50bd1724ec6680a113d3ca890323b62c674bfebabd45a852de2693ded8&=)
 
