@@ -31,7 +31,6 @@ router.get('/discord/callback',
                 console.log('User authenticated successfully, checking database for inGameName...');
 
                 try {
-                    // Assuming you have a User model to interact with your database
                     const existingUser = await User.findOne({ discordId: user.discordId });
 
                     if (!existingUser) {
