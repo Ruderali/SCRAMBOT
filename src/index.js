@@ -20,7 +20,7 @@ if(encryption.verify('brookerowan@gmail.com')){
     console.log('Encryption working')
 }
 else{
-    console.log('Encryption fucked')
+    console.log('Encryption not working')
 }
 
 
