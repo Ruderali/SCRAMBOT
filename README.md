@@ -1,5 +1,6 @@
 # SCRAMBOT!
-
+This tool is not under active development and there are several active vulnerabilities on the included libraries. It _should_ function if you simply force mongoose etc.. to the latest version, however this has not been tested. 
+Keeping the release live for archival purposes.
 SCRAMBOT is a tool designed to allow org leaders/members for Star Citizen orgs to alert orgmates to events happening 'in the verse'. The aim is to provide a light weight solution that intergrates the different common communication platforms used by gaming communities (Intially discord, DSC-SRS and Steam) and provide a unified way to inform members and co-ordinate secure communications across each channel of ongoing events or '**Scrambles**'.
 
 ## Tech Stack
